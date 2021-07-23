@@ -4,22 +4,29 @@ import re
 
 
 class ExpandSelectionToCommentsCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit, direction=None):
         # enable soft-undo
         sublime.set_timeout(lambda:
-            self.view.run_command('expand_selection_to_comments_atomic'),
+            self.view.run_command('expand_selection_to_comments_atomic', { 'direction': direction }),
             0
         )
 
 class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    DIRECTION_UP = 'up'
+    DIRECTION_DOWN = 'down'
+
+    def run(self, edit, direction=None):
         self.view_range = range(0, self.view.size() + 1)
 
         for region in self.view.sel():
-            begin = region.begin()
-            end = region.end()
-            region_begin = self.find_region_boundary(begin, False)
-            region_end = self.find_region_boundary(end, True)
+            begin = region_begin = region.begin()
+            end = region_end = region.end()
+
+            if direction == self.DIRECTION_UP or direction != self.DIRECTION_DOWN:
+                region_begin = self.find_region_boundary(begin, False)
+
+            if direction == self.DIRECTION_DOWN or direction != self.DIRECTION_UP:
+                region_end = self.find_region_boundary(end, True)
 
             if begin != region_begin or end != region_end:
                 self.view.sel().add(sublime.Region(region_begin, region_end))
