@@ -16,11 +16,6 @@ class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
     DIRECTION_UP = 'up'
     DIRECTION_DOWN = 'down'
 
-    def __init__(self, view):
-        super().__init__(view)
-
-        self.view_range = range(0, self.view.size() + 1)
-
     def run(self, edit, direction=None):
         for region in self.view.sel():
             begin = region_begin = region.begin()
@@ -39,7 +34,7 @@ class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
         res = cur = start
 
         while self.is_withint_comment(cur):
-            if self.is_comment(cur) or self.is_last_comment_char(cur):
+            if self.is_comment(cur):
                 res = cur
 
             if forward:
@@ -50,24 +45,9 @@ class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
         return res
 
     def is_comment(self, point):
-        return self.view.match_selector(point, 'comment')
-
-    def is_last_comment_char(self, point):
-        """
-        Check whether the point is on the last char in the line and there is a comment char before
-        Mostly to cover this case:
-
-        # comment goes here
-                          ^ -> cursor is here and there is no trailing newline
-
-        Without this check this character is simple ignored
-        """
-        return (self.view.classify(point) & sublime.CLASS_LINE_END != 0) and self.is_comment(point - 1)
+        return self.view.score_selector(point, 'comment') > 0
 
     def is_withint_comment(self, point):
-        if point not in self.view_range:
-            return False
-
         char = self.view.substr(point)
 
-        return self.is_comment(point) or re.match(r'\s', char) or self.is_last_comment_char(point)
+        return self.is_comment(point) or re.match(r'\s', char)
