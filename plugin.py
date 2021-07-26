@@ -34,7 +34,7 @@ class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
         res = cur = start
 
         while self.is_withint_comment(cur):
-            if self.is_comment(cur):
+            if self.is_comment(cur) or self.is_last_comment_char(cur):
                 res = cur
 
             if forward:
@@ -46,6 +46,18 @@ class ExpandSelectionToCommentsAtomicCommand(sublime_plugin.TextCommand):
 
     def is_comment(self, point):
         return self.view.score_selector(point, 'comment') > 0
+
+    def is_last_comment_char(self, point):
+        """
+        Check whether the point is on the last char in the line and there is a comment char before
+        Mostly to cover this case:
+
+        # comment goes here
+                          ^ -> cursor is here and there is no trailing newline
+
+        Without this check this character is simple ignored
+        """
+        return (self.view.classify(point) & sublime.CLASS_LINE_END != 0) and self.is_comment(point - 1)
 
     def is_withint_comment(self, point):
         char = self.view.substr(point)
