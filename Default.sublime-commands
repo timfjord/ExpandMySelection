@@ -1,0 +1,20 @@
+[
+    {
+        "caption": "Selection: Expand to Comments",
+        "command": "expand_selection_to_comments",
+    },
+    {
+        "caption": "Selection: Expand to Comments Up",
+        "command": "expand_selection_to_comments",
+        "args": {
+            "direction": "up"
+        }
+    },
+    {
+        "caption": "Selection: Expand to Comments Down",
+        "command": "expand_selection_to_comments",
+        "args": {
+            "direction": "down"
+        }
+    }
+]
