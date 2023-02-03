@@ -5,7 +5,7 @@
 
 ![Demo](docs/media/demo.gif)
 
-Expands the current selection to the nearest comment block
+Expands the current selection to fully enclose the intersecting comment block
 
 - works with multiple cursors
 - supports soft undo
