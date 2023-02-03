@@ -1,5 +1,6 @@
+<!-- markdownlint-disable -->
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
-
+<!-- markdownlint-enable -->
 # Expand Selection to Comments
 
 ![Demo](docs/media/demo.gif)
@@ -26,7 +27,7 @@ It can be bound to a key combination or invoked from the command palette.
 { "keys": ["ctrl+shift+/"], "command": "expand_selection_to_comments" }
 ```
 
-The command also accepts an optional `direction` argument that can be used to change the direction of the selection: 
+The command also accepts an optional `direction` argument that can be used to change the direction of the selection:
 
 - `up` from the current position to the beginning of the comment block
 - `down` from the current position to the end of the comment block.
@@ -39,4 +40,3 @@ The command also accepts an optional `direction` argument that can be used to ch
 ## Implementation details
 
 The command relies on the syntax highlighting information provided by Sublime Text which means that it can be used with any language that has syntax highlighting.
-
